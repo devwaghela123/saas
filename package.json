@@ -1,0 +1,12 @@
+{
+    "name": "lol",
+    "version": "1.0.0",
+    "scripts": {
+      "build": "webpack",
+      "start": "webpack-dev-server"
+    },
+    "dependencies": {
+      "webpack": "^5.4.0",
+      "webpack-dev-server": "^3.11.2"
+    }
+  }

@@ -1,0 +1,1199 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+</head>
+<body>
+    <form id="verificationForm">
+        <li>Recall the email address once again before pressing 'get otp'</li>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit" id="getOtpButton">Get OTP</button>
+    </form>
+    <label for="emailOtp">Email OTP:</label>
+    <input type="text" id="emailOtp" name="emailOtp" required>
+    <button id="submitOtp">Submit OTP</button>
+    <p id="message"></p>
+    <p id="timer"></p>
+    <button id="moveAhead" disabled>Press me daddy</button>
+    <div id="conditionalDisplay" style="display: none;">
+        conditional display content here
+    </div>
+    
+    
+    <script>
+        const emailOtpLength = 6;
+        let emailOtp = '';
+        let otpGeneratedTime = 0;
+        let timerInterval;
+        let isVerified = false;
+        
+        document.getElementById('verificationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            const email = document.getElementById('email').value;
+            const messageElement = document.getElementById('message');
+            const getOtpButton = document.getElementById('getOtpButton');
+        
+          // Check if the email already exists
+          if (localStorage.getItem(btoa(email))) {
+                messageElement.textContent = 'This email has already been used.';
+                return;
+            }
+        
+            // Generate OTP
+            emailOtp = generateOtp(emailOtpLength);
+            otpGeneratedTime = new Date().getTime();
+        
+            // Send OTP (for demonstration purposes, we will log it)
+            console.log(`Email OTP: ${emailOtp}`);
+        
+            // Integrate with EmailJS to send email OTP
+            emailjs.init('4b1kLfT2TI0mYOg0t');  // Initialize EmailJS with your user ID
+            emailjs.send('service_k4ki5rz', 'template_ccmcxll', {
+                to_email: email,
+                message: `Your verification OTP is: ${emailOtp}`
+            }).then(response => {
+                console.log('Email sent successfully:', response.status, response.text);
+                startTimer();
+                getOtpButton.disabled = true; // Disable the Get OTP button
+            }, error => {
+                console.error('Failed to send email:', error);
+            });
+        });
+        
+        document.getElementById('submitOtp').addEventListener('click', function() {
+            const enteredEmailOtp = document.getElementById('emailOtp').value;
+            const messageElement = document.getElementById('message');
+            const email = document.getElementById('email').value;
+            const currentTime = new Date().getTime();
+        
+            if (currentTime - otpGeneratedTime > 300000) {
+                messageElement.textContent = 'OTP has expired. Please try again.';
+                return;
+            }
+        
+            if (enteredEmailOtp === emailOtp) {
+                // Store the verified email in LocalStorage
+                localStorage.setItem(btoa(email), true);
+        
+                messageElement.textContent = 'Verification successful. You can use the service.';
+                isVerified = true;
+                document.getElementById('moveAhead').disabled = false;
+                clearInterval(timerInterval);
+                document.getElementById('timer').style.display = 'none'; // Hide the timer
+            } else {
+                messageElement.textContent = 'Invalid OTP. Please try again.';
+            }
+        });
+        
+        document.getElementById('moveAhead').addEventListener('click', function() {
+            if (isVerified) {
+                document.getElementById('conditionalDisplay').style.display = 'block';
+            }
+        });
+        
+        function generateOtp(length) {
+            let otp = '';
+            for (let i = 0; i < length; i++) {
+                otp += Math.floor(Math.random() * 10);
+            }
+            return otp;
+        }
+        
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 300000; // 5 minutes in milliseconds
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                timerElement.textContent = `Time left: ${minutes} minutes ${seconds} seconds`;
+                timeLeft -= 1000;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = 'OTP has expired.';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popup</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script type="text/javascript"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    /* Popup styling */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 50px;
+      border: 1px solid #ddd;
+      width: 500px;
+      height: 400px;
+      border-radius: 39px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      opacity: 0; /* Initial opacity: 0 */
+      transition: opacity 0.5s; /* Transition duration: 0.5 seconds */
+    }
+    #popup.fade-in {
+  opacity: 1; /* Final opacity: 1 */
+}
+
+    #popup h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    #popup li, #popup label {
+      font-size: 12px;
+      color: #6e6e6e;
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    #popup input[type="email"], 
+    #popup input[type="text"], 
+    #popup button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 39px;
+      border: 1px solid #ddd;
+      outline: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    #popup button {
+      background-color: black;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #popup button:hover {
+      background-color: #333;
+    }
+
+    #message, #timer {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #6e6e6e;
+      text-align: center;
+      font-weight: 400;
+      word-wrap: break-word;
+    }
+
+    /* Trigger button */
+    #myBtn {
+      position: absolute;
+      bottom: 40%;
+      right: 30%;
+      background-color: black;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 39px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+    }
+
+    #myBtn:hover {
+      background-color: #333;
+    }
+
+    /* Second popup styling */
+    /* .second-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 39px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .second-popup-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+    } */
+    /* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Body Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Second Popup Styles */
+.second-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 50px;
+  border: 1px solid #ddd;
+  width: 500px;
+  height: 400px;
+  border-radius: 39px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  display: none;
+  align-items: left;
+}
+
+.second-popup {
+  padding: 20px;
+}
+
+/* Form Styles */
+.second-popup form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.second-popup h4 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  font-weight: 600;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+.second-popup input[type="text"], 
+.second-popup input[type="email"], 
+.second-popup textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 39px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.second-popup textarea {
+  resize: vertical;
+}
+
+.second-popup input[type="submit"] {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.second-popup input[type="submit"]:hover {
+  background-color: #333;
+}
+.submit {
+  position: absolute !important;
+  bottom: 40% !important;
+  right: 30% !important;
+  background-color: black !important;
+  color: white !important;
+  padding: 15px 30px !important;
+  border-radius: 39px !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+}
+.submit .hover {
+  background-color: #333;
+}
+/* Typewriter Effect */
+.typewriter {
+    font-family: 'Poppins', sans-serif; /* Using Poppins font */
+    font-size: 2.6em; /* Increase font size to make it look like a title */
+    height: 1.5em; /* Adjust height as needed */
+    font-weight: bold; /* Make it bold like a title */
+    color: black; /* Text color */
+    position: absolute;
+    top: 50px; /* Adjusted position to move it higher */
+    left: 50px; /* Adjusted position slightly towards the center */
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid black; /* Typewriter cursor effect */
+    animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: black; }
+}
+
+
+/* mobile */
+
+
+/* Responsive Design for Typewriter Effect */
+@media (max-width: 768px) {
+  .typewriter {
+    font-size: 1.8em; /* Reduce font size for smaller screens */
+    top: 30px; /* Adjust position for smaller screens */
+    left: 20px; /* Adjust position for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .typewriter {
+    font-size: 1.4em; /* Further reduce font size for smaller screens */
+    top: 20px; /* Adjust position for smaller screens */
+    left: 10px; /* Adjust position for smaller screens */
+  }
+}
+
+/* Responsive Design for Trigger Button */
+@media (max-width: 768px) {
+  #myBtn {
+    bottom: 30%; /* Adjust position for smaller screens */
+    right: 20%; /* Adjust position for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  #myBtn {
+    bottom: 20%; /* Adjust position for smaller screens */
+    right: 10%; /* Adjust position for smaller screens */
+  }
+}
+/* Footer */
+.footer {
+  padding: 20px 0;
+  background: #000; /* Ensure background is set */
+  color: #fff; /* Text color for the footer */
+  width: 100%; /* Full-width footer */
+  position: relative;
+  z-index: 10;
+}
+
+.footer h4 {
+  margin-bottom: 10px;
+}
+
+.footer ul li {
+  line-height: 2.5;
+}
+
+.footer a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+.footer i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer .card {
+  margin: 20px 30px 30px 0;
+}
+
+.footer input[type='email'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Body and HTML to position footer */
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 100%; /* Ensures body height is full */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Push footer to the bottom */
+body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+footer.footer {
+  margin-top: auto; /* Pushes footer to the bottom */
+}
+
+/* Mobile adjustments */
+@media (max-width: 670px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center; /* Center text for mobile */
+  }
+  
+  .footer .card {
+    margin-right: 0;
+  }
+}
+
+/* Add this new CSS rule to make the footer scrollable */
+footer.footer {
+  position: relative;
+  top: 30vh; /* Move the footer below the viewport */
+}
+
+.terms-and-conditions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.terms-and-conditions input[type="checkbox"] {
+  position: absolute;
+  left: -9999px; /* Hide the original checkbox */
+}
+
+.terms-and-conditions input[type="checkbox"] + label {
+  position: relative;
+  padding-left: 4em;
+  padding-top: 0.25em;
+  cursor: pointer;
+}
+
+.terms-and-conditions input[type="checkbox"] + label:before,
+.terms-and-conditions input[type="checkbox"] + label:after {
+  content: '';
+  position: absolute;
+  height: 1.5em;
+  transition: all 0.5s ease;
+}
+
+.terms-and-conditions input[type="checkbox"] + label:before {
+  left: 0;
+  top: 0;
+  width: 3em;
+  border: 2px solid #dddddd;
+  background: #dddddd;
+  border-radius: 1.1em;
+  z-index: -1;
+}
+
+.terms-and-conditions input[type="checkbox"] + label:after {
+  left: 0.15em;
+  top: 0.125em;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 1.5em;
+}
+
+.terms-and-conditions input[type="checkbox"]:checked + label:after {
+  left: 1.65em;
+}
+
+.terms-and-conditions input[type="checkbox"]:checked + label:before {
+  background-color: #72da67;
+  border-color: #72da67;
+}
+
+.terms-and-conditions label {
+  font-size: 16px;
+  color: #000;
+}
+
+/* .terms-and-conditions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.terms-and-conditions input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  appearance: none;
+  cursor: pointer;
+}
+
+.terms-and-conditions input[type="checkbox"]:checked::before {
+  content: "\2714";
+  font-size: 16px;
+  color: #000;
+  position: absolute;
+  left: 5px;
+  top: 2px;
+}
+
+.terms-and-conditions label {
+  font-size: 16px;
+  color: #000;
+} */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 8px; 
+    font-weight: bold;
+    align-items: left;
+}
+
+input.invalid {
+    border-color: red;
+}
+
+form input[type="text"], form input[type="email"], form input[type="checkbox"] {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form input[type="submit"] {
+    padding: 10px 20px;
+    border-radius: 39px;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+form input[type="submit"]:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+  /* Styling for the form inputs and submit button */
+
+  </style>
+</head>
+<body>
+<div class="popup-container">
+  <!-- Trigger/Open The Popup -->
+  <button id="myBtn">Register Now!</button>
+  <div class="typewriter-container">
+    <p class="typewriter">Register now for the 9 days free trial</p>
+</div>
+  <!-- First Popup -->
+  <div id="popup" class="popup">
+    <h2>Email Verification</h2>
+    <form id="verificationForm">
+      <li>Recall the email before 'get OTP'</li>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <button type="submit" id="getOtpButton">Get OTP</button>
+    </form>
+    <label for="emailOtp">Email OTP:</label>
+    <input type="text" id="emailOtp" name="emailOtp" required>
+    <button id="submitOtp">Submit OTP</button>
+    <p id="message"></p>
+    <p id="timer"></p>
+    <button id="moveAhead" disabled>Move On</button>
+  </div>
+
+  <!-- Second Popup Container -->
+  <div id="second-popup-container" class="second-popup-container">
+    <div class="second-popup">
+        <form method="post" action="https://script.google.com/macros/s/AKfycbyaqThVo_wgfSYxq0vXXzWu9nmgUdodP9pGX5j3-CgunWuoahxXZKHcne_9vhcLqC1l3A/exec" name="contact-form">
+			<h4>Register Now</h4>
+			<input type="text" name="your-name" placeholder="Name">
+			<input type="text" name="your-number" placeholder="Number">
+			<input type="email" name="your-email" placeholder="Email">
+      <div class="terms-and-conditions">
+        <input type="checkbox" id="terms-checkbox" required>
+        <label for="terms-checkbox">I agree to the <a href="#" target="_blank">Terms and Conditions</a></label>
+      </div>
+		 <input type="submit" value="Submit" id="submit" >  
+		</form>
+      <!-- Content of the second popup goes here -->
+    </div>
+  </div>
+</div>
+<footer class="footer bg-black">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <a href="index.html">
+              <img src="images/logo-white.png" alt="logo" />
+            </a>
+            <div class="card">
+              <h4>Subscribe to Newsletter</h4>
+              <p class="text-sm">
+                Subscribe now to receive tips on how to take your business to
+                the next level.
+              </p>
+              <form>
+                <input type="email" id="email" placeholder="Enter your email" />
+                <button type="submit" class="btn btn-primary btn-block">
+                  Subscribe
+                </button>
+              </form>
+            </div>
+            <i class="fab fa-linkedin"></i>
+            <i class="fab fa-twitter"></i>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Our Process</a></li>
+              <li><a href="#">Join Our Team</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">News</a></li>
+              <li><a href="#">Research</a></li>
+              <li><a href="#">Recent Projects</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <ul>
+              <li>
+                <a href="mailto:waghelawealthworks@gmail.com 9999?subject=Subject%20Here&body=Body%20content%20here">waghelawealthworks@gmail.com</a>
+              </li> 
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  <script>
+
+// Modified existing code to ensure button click works
+
+// Adjusted selector for the second popup and button
+const secondPopup = document.getElementById('second-popup-container');
+const registerButton = document.getElementById('myBtn');
+
+// Function to toggle the popup visibility
+function toggleSecondPopup() {
+    if (secondPopup.classList.contains('fade-in')) {
+        secondPopup.classList.remove('fade-in');
+        document.querySelector('.footer').style.display = 'block';
+    } else {
+        secondPopup.classList.add('fade-in');
+        document.querySelector('.footer').style.display = 'none';
+        adjustSecondPopupHeight(); // Adjust popup height when shown
+    }
+}
+
+// Add event listener to the button
+registerButton.addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent any default action
+    toggleSecondPopup(); // Toggle the popup
+});
+
+// Adjust the popup height based on window size
+function adjustSecondPopupHeight() {
+    const popup = secondPopup;
+    const contentHeight = popup.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const popupPadding = parseInt(window.getComputedStyle(popup).paddingTop) +
+                         parseInt(window.getComputedStyle(popup).paddingBottom);
+
+    let newHeight = Math.min(contentHeight + popupPadding, windowHeight - 50); // Allow some margin
+
+    if (newHeight < contentHeight + popupPadding) {
+        popup.style.height = newHeight + 'px';
+        popup.style.overflowY = 'auto'; // Enable scrolling
+    } else {
+        popup.style.height = 'auto';
+        popup.style.overflowY = 'visible'; // Ensure no content is cut off
+    }
+
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+}
+
+window.addEventListener('resize', adjustSecondPopupHeight);
+
+
+
+// Clear existing error messages before revalidation
+document.querySelectorAll('.error-message').forEach(function(el) {
+    el.remove();
+});
+
+// Your existing validation and form handling code here
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.forms['contact-form'];
+    const nameInput = form.elements['your-name'];
+    const numberInput = form.elements['your-number'];
+    const emailInput = form.elements['your-email'];
+    const termsCheckbox = form.querySelector('input[type="checkbox"]');
+    const submitButton = form.querySelector('#submit');
+    const requiredFields = [nameInput, numberInput, emailInput];
+    
+    function validateField(field) {
+        const value = field.value.trim();
+        if (value === '') {
+            field.classList.add('invalid');
+            return `${field.placeholder} is required.`;
+        } else {
+            field.classList.remove('invalid');
+            return '';
+        }
+    }
+    
+    function validateForm() {
+        const errorMessages = [];
+        let allValid = true;
+        
+        requiredFields.forEach(field => {
+            const error = validateField(field);
+            if (error) {
+                errorMessages.push(error);
+                allValid = false;
+            }
+        });
+        
+        if (!termsCheckbox.checked) {
+            errorMessages.push('You must agree to the terms and conditions.');
+            allValid = false;
+        }
+        
+        if (allValid) {
+            submitButton.disabled = false;
+            clearErrorMessages();
+        } else {
+            submitButton.disabled = true;
+            displayErrorMessages(errorMessages);
+        }
+
+        return allValid; // Return the validation status
+    }
+    
+    function displayErrorMessages(messages) {
+        let errorContainer = form.querySelector('.error-container');
+        if (!errorContainer) {
+            errorContainer = document.createElement('div');
+            errorContainer.classList.add('error-container');
+            form.insertBefore(errorContainer, form.firstChild);
+        }
+        errorContainer.innerHTML = messages.join('<br>');
+    }
+    
+    function clearErrorMessages() {
+        const errorContainer = form.querySelector('.error-container');
+        if (errorContainer) {
+            errorContainer.innerHTML = '';
+        }
+    }
+    
+    form.addEventListener('input', validateForm);
+
+    form.addEventListener('submit', function(event) {
+        if (!validateForm()) {
+            event.preventDefault();  // Prevent form submission if validation fails
+        } else {
+            submitButton.disabled = true; // Optionally disable to prevent multiple submissions
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+// Get the popup element
+const popup = document.getElementById('popup');
+
+// Get the button element
+const button = document.getElementById('myBtn');
+
+// Add an event listener to the button
+button.addEventListener('click', () => {
+  // Add the fade-in class to the popup element
+  popup.classList.add('fade-in');
+});
+
+    /* hides the footer on the pop of popup */
+      document.getElementById("myBtn").addEventListener("click", function(e) {
+      e.preventDefault(); // Prevent the form from submitting if needed
+      document.querySelector(".footer").style.display = "none"; // Hide the footer
+    });
+
+window.addEventListener('resize', adjustPopupHeight);
+
+function adjustPopupHeight() {
+    const popup = document.querySelector('.popup');
+    const contentHeight = popup.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const popupPadding = parseInt(window.getComputedStyle(popup).paddingTop) +
+                         parseInt(window.getComputedStyle(popup).paddingBottom);
+    
+    // Calculate the required popup height based on content and window size
+    let newHeight = Math.min(contentHeight + popupPadding, windowHeight - 50); // Allow some margin
+
+    // Adjust the popup height and enable scrolling if necessary
+    if (newHeight < contentHeight + popupPadding) {
+        popup.style.height = newHeight + 'px';
+        popup.style.overflowY = 'auto'; // Enable scrolling
+    } else {
+        popup.style.height = 'auto';
+        popup.style.overflowY = 'visible'; // Ensure no content is cut off
+    }
+
+    // Ensure the popup is centered
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+}
+
+// Initial adjustment when the page loads
+adjustPopupHeight();
+
+    const emailOtpLength = 6;
+    let emailOtp = '';
+    let otpGeneratedTime = 0;
+    let timerInterval;
+    let isVerified = false;
+
+    // Open the popup
+    document.getElementById('myBtn').addEventListener('click', function() {
+      document.getElementById('popup').style.display = 'block';
+    });
+    document.getElementById("myBtn").addEventListener("click", function() {
+    this.style.display = "none";
+});
+
+
+    // Generate and send OTP
+    document.getElementById('verificationForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const getOtpButton = document.getElementById('getOtpButton');
+      const messageElement = document.getElementById('message');
+
+      // Check if the email already exists in local storage
+      /* if (localStorage.getItem(btoa(email))) {
+        messageElement.textContent = 'This email has already been used.';
+        return;
+      }
+ */
+    
+// Assuming there is an input field with id="emailInput"
+emailOtp = generateOtp(emailOtpLength);
+otpGeneratedTime = new Date().getTime();
+
+emailjs.init('4b1kLfT2TI0mYOg0t'); // Initialize EmailJS
+emailjs.send('service_k4ki5rz', 'template_ccmcxll', {
+  email: email, // <--- Add this line to adapt to {{email}} placeholder
+  message: `Your verification OTP is: ${emailOtp}`
+}).then(() => {
+  startTimer();
+  getOtpButton.disabled = true;
+}).catch(error => {
+  console.error('Failed to send email:', error);
+});
+    });
+
+    // Submit OTP
+    document.getElementById('submitOtp').addEventListener('click', function() {
+      const enteredEmailOtp = document.getElementById('emailOtp').value;
+      const messageElement = document.getElementById('message');
+      const email = document.getElementById('email').value;
+      const currentTime = new Date().getTime();
+
+      if (currentTime - otpGeneratedTime > 300000) {
+        messageElement.textContent = 'OTP has expired. Please try again.';
+        return;
+      }
+
+      if (enteredEmailOtp === emailOtp) {
+        localStorage.setItem(btoa(email), true);
+        messageElement.textContent = 'Verification successful. You can use the service.';
+        isVerified = true;
+        document.getElementById('moveAhead').disabled = false;
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = 'none';
+      } else {
+        messageElement.textContent = 'Invalid OTP. Please try again.';
+      }
+    });
+
+    // Move to the second popup
+    document.getElementById('moveAhead').addEventListener('click', function() {
+      if (isVerified) {
+        document.getElementById('popup').style.display = 'none';
+        document.getElementById('second-popup-container').style.display = 'block';
+       
+      }
+    });
+
+    function generateOtp(length) {
+      let otp = '';
+      for (let i = 0; i < length; i++) {
+        otp += Math.floor(Math.random() * 10);
+      }
+      return otp;
+    }
+
+    function startTimer() {
+      const timerElement = document.getElementById('timer');
+      let timeLeft = 300000; // 5 minutes in milliseconds
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        timerElement.textContent = `OTP SENT! Time left for OTP to expire: ${minutes} minutes ${seconds} seconds`;
+        timeLeft -= 1000;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timerElement.textContent = 'OTP has expired.';
+        }
+      }, 1000);
+    }
+
+    // Prevent multiple OTP requests within 5 minutes
+/*     document.getElementById('getOtpButton').addEventListener('click', function() {
+      const email = document.getElementById('email').value;
+      const lastRequestTime = localStorage.getItem(btoa(email));
+      const currentTime = new Date().getTime();
+
+      if (lastRequestTime && currentTime - lastRequestTime < 300000) {
+        const timeLeft = Math.ceil((300000 - (currentTime - lastRequestTime)) / 1000);
+        alert(`Please wait ${timeLeft} seconds before requesting another OTP.`);
+        return;
+      }
+
+      localStorage.setItem(btoa(email), currentTime);
+    }); */
+    // Get the second popup container and the submit button
+const secondPopupContainer = document.getElementById('second-popup-container');
+const submitButton = document.getElementById('submit');
+
+// Add an event listener to the submit button
+submitButton.addEventListener('click', () => {
+  // Close the second popup when the submit button is clicked
+  secondPopupContainer.style.display = 'none';
+  
+});
+
+// Add an event listener to the document to prevent closing the popup when clicking outside
+document.addEventListener('click', (event) => {
+  // Check if the click event is outside the second popup container
+  if (!secondPopupContainer.contains(event.target)) {
+    // Prevent the default behavior of closing the popup
+    event.stopPropagation();
+  }
+});
+
+// Add an event listener to the second popup container to prevent closing when pressing the ESC key
+secondPopupContainer.addEventListener('keydown', (event) => {
+  // Check if the ESC key is pressed
+  if (event.key === 'Escape') {
+    // Prevent the default behavior of closing the popup
+    event.preventDefault();
+  }
+});
+
+
+/* mobile display outlet */
+window.addEventListener('resize', function() {
+    const screenWidth = window.innerWidth;
+
+    // Mobile layout adjustments
+    if (screenWidth < 768) {
+        document.getElementById('typewriter').style.fontSize = '32px';
+        document.getElementById('myBtn').style.padding = '10px 20px';
+        document.getElementById('myBtn').style.width = '80%';
+    } else {
+        // Reset to default styles for larger screens
+        document.getElementById('typewriter').style.fontSize = '48px';
+        document.getElementById('myBtn').style.padding = '15px 30px';
+        document.getElementById('myBtn').style.width = 'auto';
+    }
+});
+
+// Initial check to set th3e correct layout on page load
+window.dispatchEvent(new Event('resize'));
+
+document.getElementById('myBtn').addEventListener('click', function() {
+    // Always hide the Register Now button
+    this.style.display = 'none';
+    
+    // Check the screen width
+    const screenWidth = window.innerWidth;
+
+    // If the screen width is greater than 768px (example for tablet/desktop), hide the typewriter text
+    if (screenWidth > 768) {
+        document.querySelector('.typewriter-container').style.display = 'none';
+    }
+
+    // Show the popup
+    document.getElementById('popup').style.display = 'block';
+});
+
+
+
+
+/* these are the new features regarding the form 2, in the second popup */
+// Get the form and submit button elements
+// Get the form and submit button elements
+ const form = document.querySelector('form[name="contact-form"]');
+submitButton = document.getElementById('submit'); // Remove the const keyword
+/*
+// Add an event listener to the form fields to check if all fields are filled
+form.addEventListener('input', () => {
+  const name = document.querySelector('input[name="your-name"]').value;
+  const number = document.querySelector('input[name="your-number"]').value;
+  const email = document.querySelector('input[name="your-email"]').value;
+  const message = document.querySelector('textarea[name="message"]').value;
+
+
+  // Enable the submit button if all fields are filled
+  if (name && number && email && message) {
+    submitButton.disabled = false;
+  } else {
+    submitButton.disabled = true;
+  }
+}); */
+/* form = document.querySelector('form[name="contact-form"]');
+ submitButton = document.getElementById('submit');
+const termsCheckbox = document.getElementById('terms');
+
+// Add an event listener to the form fields to check if all fields are filled
+form.addEventListener('input', () => {
+  const name = document.querySelector('input[name="your-name"]').value;
+  const number = document.querySelector('input[name="your-number"]').value;
+  const email = document.querySelector('input[name="your-email"]').value;
+  const termsChecked = termsCheckbox.checked;
+
+  // Enable the submit button if all fields are filled and terms are checked
+  if (name && number && email && termsChecked) {
+    submitButton.disabled = false;
+  } else {
+    submitButton.disabled = true;
+  }
+});
+
+// Add an event listener to the terms checkbox to update the submit button state
+termsCheckbox.addEventListener('change', () => {
+  if (termsCheckbox.checked) {
+    submitButton.disabled = false;
+  } else {
+    submitButton.disabled = true;
+  }
+});
+// ... */
+
+
+
+
+
+// Add an event listener to the submit button to handle the submission
+submitButton.addEventListener('click', (e) => {
+  e.preventDefault(); // Prevent the default submission behavior
+
+  // Get the form data
+  const formData = new FormData(form);
+
+  // Send the data to the Google Sheet using the existing form action
+  fetch(form.action, {
+    method: 'POST',
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((message) => console.log(message))
+    .catch((error) => console.error(error));
+    
+  });
+
+  // Send an email using EmailJS
+/*  src="https://cdn.emailjs.com/dist/email.min.js"
+ type="text/javascript" */
+
+ (function() {
+            emailjs.init("4b1kLfT2TI0mYOg0t");
+        })();
+        
+        function sendEmail(event) {
+            event.preventDefault();
+            
+            const name = document.querySelector('input[name="your-name"]').value;
+            const email = document.querySelector('input[name="your-email"]').value;
+
+            const templateParams = {
+                name: name,
+                email: email,
+                message: `Thank you for subscribing to our 9-day free trial. You will start receiving newsletters from tomorrow between 9-11 pm. During special events, you may also receive newsletters 1-2 hours before the market opens.\n\nPlease note that our newsletters are filtered and eased-up information of already existing news, tailored to your needs.\n\nTo cancel your free subscription, simply reply to this email with "cancel". However, please be aware that once you cancel, you will not be able to avail of our free newsletters again.\n\nWe assure you that your data is safe with us.\n\nBest regards,`
+            };
+
+            emailjs.send('service_xkv5hta', 'template_8hu661s', templateParams)
+                .then(function(response) {
+                    alert('Confirmation email sent successfully!');
+                }, function(error) {
+                    alert('Failed to send the email. Please try again later.');
+                });
+
+                // Attach the sendEmail function to the submit button
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('submit').addEventListener('click', sendEmail);
+             });
+            // Optionally, submit the form data to the server or any other action
+            // event.target.submit(); 
+        }
+
+        
+  </script>
+</body>
+</html>

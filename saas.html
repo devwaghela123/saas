@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Growth App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="saas.css"> 
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <a href="saas.html">
+            <img src="images/logo.png" alt="logo" />
+          </a>
+        </div>
+
+        <div class="main-menu">
+          <ul>
+            <li>
+              <a href="saas.html">Home</a>
+            </li>
+            <li>
+              <a href="#">About Us</a>
+            </li>
+            <li>
+              <a href="#">Blog</a>
+            </li>
+            <li>
+              <a class="btn" href="#"> <i class="fas fa-user"></i> Log In </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Hamburger Button -->
+        <button class="hamburger-button">
+          <div class="hamburger-line"></div>
+          <div class="hamburger-line"></div>
+          <div class="hamburger-line"></div>
+        </button>
+        <div class="mobile-menu">
+          <ul>
+            <li>
+              <a href="saas.html">Home</a>
+            </li>
+            <li>
+              <a href="#">About Us</a>
+            </li>
+            <li>
+              <a href="#">Blog</a>
+            </li>
+            <li>
+              <a class="btn" href="#"> <i class="fas fa-user"></i> Log In </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-heading text-xxl">
+            A solution to keep yourself wired in the markets. Simpler & no clutter!
+          </h1>
+          <p class="hero-text">
+           Reliable market updates delivered without the noise, keeping you informed and in control.
+          </p>
+          <div class="hero-button">
+            <button class="btn btn-primary" id="get-started-btn">Get Started</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Video Section -->
+    <section class="video bg-black">
+      <div class="container-sm">
+        <h2 class="video-heading text-xl text-center">
+          See how it works and get started in less than 2 minutes
+        </h2>
+        <div class="video-content">
+          <a href="#">
+            <img
+              src="images/video-preview.png"
+              alt="video"
+              class="video-preview"
+            ></img>
+          </a>
+
+          <div class="hero-button">
+            <button class="btn btn-primary" id="get-started-btn">Get Started</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="testimonials bg-dark">
+      <div class="container">
+        <h3 class="testimonials-heading text-xl">
+          Doubting us? maybe our clients might flaberghast you, and we'll kidnapp your trust eventually :) 
+        </h3>
+        <div class="testimonials-grid">
+          <div class="card">
+            <p>
+              “This service really saves lives. I receive the critical market updates at the precise moent I need them,
+               free from superfluous noise. Overall, it feels fantastic to finally use something that just works and is genuinely trustworthy,
+                even though the interface might occasionally be a little slow.”
+            </p>
+
+            <p>Prachi Mehta</p>
+            <p>#</p>
+          </div>
+
+          <div class="card">
+            <p>
+              “This tool provides clarity in a world where data is abundant but overwhelming. 
+              It's dependable, user-friendly, and my first choice for market intelligence.
+               If you're serious about staying updated, it's absolutely worth it even though it could use more sophisticated features.”
+            </p>
+
+            <p>Nirvi Waghela</p>
+            <p>#</p>
+          </div>
+
+          <div class="card">
+            <p>
+              “I've used a lot of platforms, but this one is really good.
+               It doesn't overburden me with notifications while providing me with the perfect number of updates.
+               It's developed into a tool that I depend on every day amnd truly trust.”
+            </p>
+
+            <p>Meet Kariya
+            <p>#</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing">
+      <div class="container-sm">
+        <h3 class="pricing-heading text-xl text-center">Pricing</h3>
+        <p class="pricing-subheading text-md text-center">
+          Start free and lookup how well the service suits you. No hidden fees. 
+          for free.
+        </p>
+        <div class="pricing-grid">
+          <!-- Pricing Card 1 -->
+          <div class="card bg-light">
+            <div class="pricing-card-header">
+              <h4 class="pricing-heading text-xl">Try us out</h4>
+              <p class="pricing-card-subheading">
+                Forge trust with us, avail free newsletters for free which usually costs 49 for 30-days(note* No autobilling after 30-days) <a href="index.html" class="highlight-link">Know more*</a>
+                
+              </p>
+              <p class="pricing-card-price">
+                <span class="text-xl">Free</span>
+                *No credit card needed
+              </p>
+            </div>
+            <div class="pricing-card-body">
+              <ul>
+                <li><i class="fas fa-check"></i>Filtered stock market news</li>
+                <li>
+                  <i class="fas fa-check"></i>One newsletter every two days 
+                </li>
+                <li><i class="fas fa-check"></i>Selective news which is only important</li>
+                <li>
+                  <i class="fas fa-check"></i>Want more? Pay and Subscribe to the pack onto the next
+                  
+                </li>
+              </ul>
+              <a href="auth0login.html"  class="btn btn-primary btn-block">Get Started</a>
+             <!--  popopoppopoop -->
+              
+             </div>
+           </div>
+
+          <!-- Pricing Card 2 -->
+          <div class="card bg-black">
+            <div class="pricing-card-header">
+              <h4 class="pricing-card-heading text-xl">Paid</h4>
+              <p class="pricing-card-subheading">
+                Our paid service will prove to be wonders to you, timely newsletters every trading day to keep you up to date 
+              </p>
+              <p class="pricing-card-price">
+                <span class="text-xl">69</span> /month
+              </p>
+            </div>
+            <div class="pricing-card-body">
+              <p>Everything from the free plan plus:</p>
+              <ul>
+                <li><i class="fas fa-check"></i>Newsletter everyday</li>
+                <li><i class="fas fa-check"></i>More time specific</li>
+                <li><i class="fas fa-check"></i>Custom time(Whenever you're free)</li>
+              </ul>
+              <button class="btn btn-primary btn-block">Get Started</button>
+              <div class="popup-container">
+                <!-- The close button -->
+                <button class="close-btn">×</button>
+                <!-- The image container -->
+                <div class="image-container">
+                  <img src="C:\Users\devwa\OneDrive\Desktop\lol\404 Page#DailyUI#008.jfif" alt="Image">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="pricing-footer text-center">
+         <!--  All prices are in USD and charged per month with applicable taxes
+          added at checkout. --> All the prices are in INR and charged per month with aplicable taxes added at the checkout :)
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq bg-light">
+      <div class="container-sm">
+        <h3 class="text-xl text-center">Frequently Asked Questions</h3>
+        <ul class="faq-menu">
+          <li class="active" data-category="all">All</li>
+          <li data-category="getting-started">Getting Started</li>
+          <li data-category="pricing">Pricing</li>
+        </ul> 
+        <div class="faq-content">
+          <div class="faq-group">
+            <div class="faq-group-header">
+              <h4 class="text-md">
+                How will I get my Newsletters?
+              </h4>
+              <i class="fas fa-minus"></i>
+            </div>
+            <div class="faq-group-body open">
+              <p>
+               The newsletter will be delivered you on your prefered email address
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-group">
+            <div class="faq-group-header">
+              <h4 class="text-md">
+                Will my money get debited after 30-days free trial?
+              </h4>
+              <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-group-body">
+              <p>
+                No, that plan is kept seperate from the paid plan, in that, the any kind of payment process is excluded in it, just simple subsciption process :
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-group">
+            <div class="faq-group-header">
+              <h4 class="text-md">
+                Will I get tips??
+              </h4>
+              <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-group-body">
+              <p>
+               Any kind of tipping, stock referal, or calls, *ETC, are not our expertise, they are not included in any kind of newsletter we provide, there is a reason it is called (news)letter
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-group">
+            <div class="faq-group-header">
+              <h4 class="text-md">
+                Do you cover global stock markets or just the Indian Markets?
+              </h4>
+              <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-group-body">
+              <p>
+                As of now, our primary focus is on the Indian Markets, WealthWire is focusing on Indian Markets as of now, will expand to global markets reviewing our user base and as we expand, we apreciete your question.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-group">
+            <div class="faq-group-header">
+              <h4 class="text-md">Is the app available on all devices?</h4>
+              <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-group-body">
+              <p>
+                As of now, we have only launced this as a webapp, available on all browsers and all devices, You may find inconvinence on the UI amongst different devices.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-group">
+            <div class="faq-group-header">
+              <h4 class="text-md">
+                Why should I trust your newsletter? It seems like just another attempt to get my email and spam me with useless information.
+              </h4>
+              <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-group-body">
+              <p>
+                We get it – there's a lot of noise out there, and it's hard to know who to trust. But here’s why we’re different: We are committed to transparency and quality. We don’t believe in spamming our readers; instead, we focus on delivering value. Every edition is packed with actionable insights, clear analysis, and the latest market trends, all presented in a straightforward manner. Plus, we offer a no-questions-asked unsubscribe option if you ever feel we’re not meeting your expectations. Give us a chance, and we think you'll see the difference.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-black">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <a href="index.html">
+              <img src="images/logo-white.png" alt="logo" />
+            </a>
+            <div class="card">
+              <h4>Subscribe to Newsletter</h4>
+              <p class="text-sm">
+                Subscribe now to receive tips on how to take your business to
+                the next level.
+              </p>
+              <form>
+                <input type="email" id="email" placeholder="Enter your email" />
+                <button type="submit" class="btn btn-primary btn-block">
+                  Subscribe
+                </button>
+              </form>
+            </div>
+            <i class="fab fa-linkedin"></i>
+            <i class="fab fa-twitter"></i>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Our Process</a></li>
+              <li><a href="#">Join Our Team</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">News</a></li>
+              <li><a href="#">Research</a></li>
+              <li><a href="#">Recent Projects</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <ul>
+              <li>
+                <a href="mailto:waghelawealthworks@gmail.com 9999?subject=Subject%20Here&body=Body%20content%20here">waghelawealthworks@gmail.com</a>
+              </li> 
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="main.js"></script>
+  </body>
+</html>

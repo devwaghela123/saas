@@ -1,0 +1,30 @@
+ <!-- Pricing Card 1 -->
+          <div class="card bg-light">
+            <div class="pricing-card-header">
+              <h4 class="pricing-heading text-xl">Try us out</h4>
+              <p class="pricing-card-subheading">
+                Forge trust with us, avail free newsletters for free which usually costs 49 for 30-days(note* No autobilling after 30-days) <a href="index.html" class="highlight-link">Know more*</a>
+                
+              </p>
+              <p class="pricing-card-price">
+                <span class="text-xl">Free</span>
+                *No credit card needed
+              </p>
+            </div>
+            <div class="pricing-card-body">
+              <ul>
+                <li><i class="fas fa-check"></i>Filtered stock market news</li>
+                <li>
+                  <i class="fas fa-check"></i>One newsletter every two days 
+                </li>
+                <li><i class="fas fa-check"></i>Selective news which is only important</li>
+                <li>
+                  <i class="fas fa-check"></i>Want more? Pay and Subscribe to the pack onto the next
+                  
+                </li>
+              </ul>
+              <a href="#" class="btn btn-primary btn-block">Get Started</a>
+            </div>. integrate all the things and my codes inside this div, including popups,
+ give me the js code seperately, and dont add css code, i will do that on my own, and you will not
+change anything in this div, but only add our two codes, and the thing you mentioned, the #otppopup
+and #formpopup, you please do and edit some of my code, edit it, and then just give me the code,
